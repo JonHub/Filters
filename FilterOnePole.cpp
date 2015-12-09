@@ -17,9 +17,16 @@ void FilterOnePole::setFilter( FILTER_TYPE ft, float fc, float initialValue ) {
 }
 
 float FilterOnePole::input( float inVal ) {
-  long time = micros();
-  ElapsedUS = float(time - LastUS);   // cast to float here, for math
+  long int time = micros();
+  long int ElapsedUS = time - LastUS;   // stick to long int here, because of underflow with float on subtractions.
+    // (31+1 bits of long int compared to 23+1 bit of the mantissa of float)
   LastUS = time;                      // update this now
+
+  // minimize the effect of an overflow of micros(), which happens every 70 Minutes.
+  if(ElapsedUS < 0)
+  {
+      ElapsedUS = 0;
+  }
 
   // shift the data values
   Ylast = Y;
