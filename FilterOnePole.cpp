@@ -25,7 +25,7 @@ float FilterOnePole::input( float inVal ) {
   // minimize the effect of an overflow of micros(), which happens every 70 Minutes.
   if(ElapsedUS < 0)
   {
-      ElapsedUS = 0;
+      ElapsedUS = 10; // do not set to zero!!! (division by zero)
   }
 
   // shift the data values
