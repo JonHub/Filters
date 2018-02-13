@@ -120,7 +120,7 @@ void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float i
 float FilterTwoPole::input( float drive ) {
   Fprev = drive;                      // needed when using filter as a highpass
 
-  long now = micros();                      // get current time
+  unsigned long now = micros();             // get current time
   float dt = 1e-6*float(now - LastTimeUS);  // find dt
   LastTimeUS = now;                         // save the last time
   

@@ -29,7 +29,7 @@ struct FilterOnePole {
   // 35 mins, 47 seconds ... however, the wrap does not matter,
   // because the delta will still be correct (always positive and small)
   float ElapsedUS;   // time since last update
-  long LastUS;       // last time measured
+  unsigned long LastUS;  // last time measured
 
   FilterOnePole( FILTER_TYPE ft=LOWPASS, float fc=1.0, float initialValue=0 );
   

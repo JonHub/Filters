@@ -3,7 +3,7 @@
 
 // returns the derivative
 struct FilterDerivative {
-  long LastUS;
+  unsigned long LastUS;
   float LastInput;
   
   float Derivative;

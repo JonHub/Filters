@@ -17,7 +17,7 @@ void FilterOnePole::setFilter( FILTER_TYPE ft, float fc, float initialValue ) {
 }
 
 float FilterOnePole::input( float inVal ) {
-  long time = micros();
+  unsigned long time = micros();
   ElapsedUS = float(time - LastUS);   // cast to float here, for math
   LastUS = time;                      // update this now
 
