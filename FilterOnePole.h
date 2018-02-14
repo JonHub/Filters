@@ -25,8 +25,8 @@ struct FilterOnePole {
 
   float X;      // most recent input value
 
-  // elapsed times are kept in long, and will wrap every
-  // 35 mins, 47 seconds ... however, the wrap does not matter,
+  // elapsed times are kept in unsigned long, and will wrap every
+  // 71 mins, 35 seconds ... however, the wrap does not matter,
   // because the delta will still be correct (always positive and small)
   float ElapsedUS;   // time since last update
   unsigned long LastUS;  // last time measured
