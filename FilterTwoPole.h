@@ -41,7 +41,7 @@ struct FilterTwoPole {
 
   bool IsHighpass;  // false for normal output, true will make a lowpass into a highpass
 
-  long LastTimeUS;  // last time measured
+  unsigned long LastTimeUS;  // last time measured
 
   FilterTwoPole( float frequency0 = 1, float qualityFactor = 1, float xInit = 0);
 
