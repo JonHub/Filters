@@ -63,17 +63,33 @@ while( true ) {
 }
 ```
 
+## Sampling rates
+
+In typical filter applications, the sampling rate is constant and known
+at the beginning. On the Arduino, however, this is often difficult to
+achieve, as an `analogRead()` within a loop doesn't quite guarantee a
+constant sampling rate. These filters are designed to cope well with
+such situations. The time difference between consecutive samples is
+computed dynamically by taking the difference between the time of the
+current and the previous calls to the filter’s `input()` method. This
+means `input()` should always be called as soon as a data sample is
+available, otherwise the sampling times assumed by the filter will be
+wrong.
+
+Note that handling variable sampling rates comes at a significant cost
+in terms of processing time, which makes these filters a poor choice for
+constant sampling rate applications.
+
+In general, the filter’s output will be more accurate if `input()` is
+called more frequently. Ideally, the delay between samples should be no
+more than the filter’s time constant τ. If the filter is defined by a
+cutoff frequency f<sub>c</sub>, it’s time constant is
+τ&nbsp;=&nbsp;1/(2πf<sub>c</sub>).
+
 ## Implementation Notes
 
 The filters are implemented as IIR (infinite impulse response) filters,
-which allows them to operate in real time. In a typical IIR
-implementation, the time step between samples is constant, and known at
-the beginning.
-
-In this case, the time step between update can vary, and is computed
-dynamically by taking the difference between the time of the current
-`input()` and the last `input()` to the filter. In general, the filter
-values will be more accurate if `input()` is called more frequently.
+which allows them to operate in real time.
 
 All of the filters remain stable, even if `input()` is not called
 frequently enough. In the case of the single pole (RC type) filters, the
@@ -87,5 +103,4 @@ The code prevents this by setting a maximum allowable timestep
 `input()` in called less frequently that this, the time step is
 throttled to this value, and the oscillator remains stable.
 
-The filter classes use implemented using 32-bit floating point numbers
-(`float`).
+The filter classes use 32-bit floating point numbers (`float`).
