@@ -30,11 +30,12 @@ struct FilterOnePole {
   // because the delta will still be correct (always positive and small)
   float ElapsedUS;   // time since last update
   long LastUS;       // last time measured
+  float fs = -1.0;
 
-  FilterOnePole( FILTER_TYPE ft=LOWPASS, float fc=1.0, float initialValue=0 );
-  
+  FilterOnePole( FILTER_TYPE ft=LOWPASS, float fc=1.0, float initialValue=0, float fs=-1.0 );
+
   // sets or resets the parameters and state of the filter
-  void setFilter( FILTER_TYPE ft, float tauS, float initialValue );
+  void setFilter( FILTER_TYPE ft, float tauS, float initialValue, float fsam =-1.0 );
 
   void setFrequency( float newFrequency );
   

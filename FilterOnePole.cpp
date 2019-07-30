@@ -1,25 +1,28 @@
 #include "FilterOnePole.h"
 #include "FloatDefine.h"
 
-FilterOnePole::FilterOnePole( FILTER_TYPE ft, float fc, float initialValue ) {
-  setFilter( ft, fc, initialValue );
+FilterOnePole::FilterOnePole( FILTER_TYPE ft, float fc, float initialValue, float fs ) {
+  setFilter( ft, fc, initialValue, fs );
 }
 
-void FilterOnePole::setFilter( FILTER_TYPE ft, float fc, float initialValue ) {
+void FilterOnePole::setFilter( FILTER_TYPE ft, float fc, float initialValue, float fsam ) {
   FT = ft;
   setFrequency( fc );
 
   Y = initialValue;
   Ylast = initialValue;
   X = initialValue;
-
+  fs = fsam;
   LastUS = micros();
 }
 
 float FilterOnePole::input( float inVal ) {
-  long time = micros();
-  ElapsedUS = float(time - LastUS);   // cast to float here, for math
-  LastUS = time;                      // update this now
+  if (fs < 0.0){
+    long time = micros();
+    ElapsedUS = float(time - LastUS);   // cast to float here, for math
+    LastUS = time;                      // update this now
+  }
+  else{ElapsedUS = 1e6/fs;}
 
   // shift the data values
   Ylast = Y;
