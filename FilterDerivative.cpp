@@ -1,13 +1,19 @@
 #include "FilterDerivative.h"
 #include "Arduino.h"
 
+float FilterDerivative::FilterDerivative( float fsam ) {
+  fs = fsam;
+}
 float FilterDerivative::input( float inVal ) {
+  if (fs < 0.0) {
   long thisUS = micros();
   float dt = 1e-6*float(thisUS - LastUS);   // cast to float here, for math
   LastUS = thisUS;                          // update this now
-  
+
   Derivative = (inVal-LastInput) / dt;
-    
+  }
+  else{Derivative = (inVal-LastInput) * fs;}
+
   LastInput = inVal;
   return output();
 }

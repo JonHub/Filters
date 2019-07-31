@@ -5,9 +5,10 @@
 struct FilterDerivative {
   long LastUS;
   float LastInput;
+  float fs =-1;
   
   float Derivative;
-  
+  FilterDerivative(float fsam =-1);
   float input( float inVal );
   
   float output();

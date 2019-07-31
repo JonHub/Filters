@@ -61,14 +61,14 @@
 // (note – ramp time for a Bessel filter is about 1/(2F_0 ) )
 
 
-FilterTwoPole::FilterTwoPole( float frequency0, float qualityFactor, float xInit ) {
+FilterTwoPole::FilterTwoPole( float frequency0, float qualityFactor, float xInit, float fsam ) {
   X = xInit;              // start it some arbitrary position
   Vprev = 0;              // initially stopped
   IsHighpass = false;     // by default, a normal oscillator
 
   setQ( qualityFactor );
   setFrequency0( frequency0 );
-
+  fs = fsam;
   LastTimeUS = micros();
 }
 
@@ -83,7 +83,7 @@ void FilterTwoPole::setFrequency0( float f ) {
   W0 = TWO_PI*abs(f);
 }
 
-void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float initialValue ) {
+void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float initialValue, float fsam ) {
   // if this is a highpass filter, set to invert the transfer function on the output
   //if( ft == HIGHPASS_BESSEL || ft == HIGHPASS_BUTTERWORTH ) {
   //  IsHighpass = true;
@@ -93,6 +93,7 @@ void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float i
   //}
 
   X = initialValue;
+  fs = fsam;
   
   if( ft == LOWPASS_BESSEL ) {
     setFrequency0( frequency3db * 1.28 );
@@ -120,6 +121,7 @@ void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float i
 float FilterTwoPole::input( float drive ) {
   Fprev = drive;                      // needed when using filter as a highpass
 
+  if (fs < 0.0) {
   long now = micros();                      // get current time
   float dt = 1e-6*float(now - LastTimeUS);  // find dt
   LastTimeUS = now;                         // save the last time
@@ -131,6 +133,8 @@ float FilterTwoPole::input( float drive ) {
   // note this will result in an incorrect answer, but if dt is too large
   // the answer will be incorrect, regardless.
   dt = constrain( dt, 0, 1.0/W0 );
+  }
+  else{float dt = 1/fs;}
 
   float A = sq(W0)*drive - W0/Q*Vprev - sq(W0)*X; // *** compute acceleration
   float V = Vprev + A * dt;                       // step velocity
